@@ -119,12 +119,12 @@ class StoryTellerManager(
         _currentStory.value = StoryState(newMap)
     }
 
-    fun createCheckItem(position: Int) {
+    fun createCheckItem(position: List<Int>) {
         updateState()
         _currentStory.value = contentHandler.createCheckItem(_currentStory.value.stories, position)
     }
 
-    fun onTextEdit(text: String, position: Int) {
+    fun onTextEdit(text: String, position: List<Int>) {
         textChanges[position] = text
         backStackManager.addAction(TextEditInfo(text, position))
     }
@@ -245,7 +245,7 @@ class StoryTellerManager(
 
     private fun revertAddStory(addStoryUnit: AddStoryUnit) {
         contentHandler.deleteStory(
-            DeleteInfo(addStoryUnit.storyUnit, position = addStoryUnit.position),
+            DeleteInfo(addStoryUnit.storyUnit, positionList = addStoryUnit.position),
             currentStory.value.stories
         )?.let { newState ->
             _currentStory.value = newState
@@ -256,7 +256,7 @@ class StoryTellerManager(
         val (_, newStory) = contentHandler.addNewContent(
             currentStory.value.stories,
             deleteInfo.storyUnit,
-            deleteInfo.position
+            deleteInfo.positionList
         )
 
         return StoryState(

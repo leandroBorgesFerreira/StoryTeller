@@ -29,7 +29,7 @@ class LargeEmptySpace(
                     MoveInfo(
                         data.storyUnit,
                         positionFrom = data.positionFrom,
-                        positionTo = drawInfo.position - 1
+                        positionTo = drawInfo.positionList - 1
                     )
                 )
             }

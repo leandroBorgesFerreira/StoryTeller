@@ -20,7 +20,7 @@ class ContentHandler(
     private val stepsNormalizer: UnitsNormalizationMap
 ) {
 
-    fun createCheckItem(currentStory: Map<Int, StoryStep>, position: Int): StoryState {
+    fun createCheckItem(currentStory: Map<Int, StoryStep>, position: List<Int>): StoryState {
         val newMap = currentStory.toMutableMap()
         val newCheck = StoryStep(
             id = UUID.randomUUID().toString(),
@@ -35,7 +35,7 @@ class ContentHandler(
     fun addNewContent(
         currentStory: Map<Int, StoryStep>,
         newStoryUnit: StoryStep,
-        position: Int
+        position: List<Int>
     ): Pair<Int, Map<Int, StoryStep>> {
         val mutable = currentStory.values.toMutableList()
         var acc = position

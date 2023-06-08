@@ -50,7 +50,7 @@ import com.github.leandroborgesferreira.storyteller.text.edition.TextCommandHand
 
 class CheckItemDrawer(
     private val onCheckedChange: (CheckInfo) -> Unit,
-    private val onTextEdit: (String, Int) -> Unit,
+    private val onTextEdit: (String, List<Int>) -> Unit,
     private val onDeleteRequest: (DeleteInfo) -> Unit,
     private val commandHandler: TextCommandHandler
 ) : StoryUnitDrawer {
@@ -58,7 +58,7 @@ class CheckItemDrawer(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun LazyItemScope.Step(step: StoryStep, drawInfo: DrawInfo) {
-        val dropInfo = DropInfo(step, drawInfo.position)
+        val dropInfo = DropInfo(step, drawInfo.positionList)
         val focusRequester = remember { FocusRequester() }
         var hasFocus by remember { mutableStateOf(false) }
 
@@ -95,7 +95,7 @@ class CheckItemDrawer(
                             modifier = Modifier.padding(6.dp),
                             checked = step.checked ?: false,
                             onCheckedChange = { checked ->
-                                onCheckedChange(CheckInfo(step, drawInfo.position, checked))
+                                onCheckedChange(CheckInfo(step, drawInfo.positionList, checked))
                             },
                             enabled = drawInfo.editable,
                         )
@@ -109,18 +109,18 @@ class CheckItemDrawer(
                                 hasFocus = focusState.hasFocus
                             }
                             .callOnEmptyErase(inputText.selection) {
-                                onDeleteRequest(DeleteInfo(step, drawInfo.position))
+                                onDeleteRequest(DeleteInfo(step, drawInfo.positionList))
                             },
                         value = inputText,
                         onValueChange = { value: TextFieldValue ->
                             if (!commandHandler.handleCommand(
                                     value.text,
                                     step,
-                                    drawInfo.position
+                                    drawInfo.positionList
                                 )
                             ) {
                                 inputText = value
-                                onTextEdit(value.text, drawInfo.position)
+                                onTextEdit(value.text, drawInfo.positionList)
                             }
                         },
                         textStyle = textStyle,
@@ -134,7 +134,7 @@ class CheckItemDrawer(
                     if (hasFocus) {
                         Icon(
                             modifier = Modifier.clickable {
-                                onDeleteRequest(DeleteInfo(step, drawInfo.position))
+                                onDeleteRequest(DeleteInfo(step, drawInfo.positionList))
                             },
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(R.string.delete_check_item)

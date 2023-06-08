@@ -48,13 +48,13 @@ object DefaultDrawers {
 
     fun create(
         editable: Boolean = false,
-        onTextEdit: (String, Int) -> Unit,
+        onTextEdit: (String, List<Int>) -> Unit,
         onLineBreak: (LineBreakInfo) -> Unit,
         mergeRequest: (MergeInfo) -> Unit = { },
         moveRequest: (MoveInfo) -> Unit = { },
         checkRequest: (CheckInfo) -> Unit = { },
         onDeleteRequest: (DeleteInfo) -> Unit,
-        createCheckItem: (Int) -> Unit,
+        createCheckItem: (List<Int>) -> Unit,
         clickAtTheEnd: () -> Unit,
         groupsBackgroundColor: Color = Color.Transparent
     ): Map<String, StoryUnitDrawer> =

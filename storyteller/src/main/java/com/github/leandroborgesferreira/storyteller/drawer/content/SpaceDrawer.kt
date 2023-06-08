@@ -30,7 +30,7 @@ class SpaceDrawer(private val moveRequest: (MoveInfo) -> Unit = {}) : StoryUnitD
                     MoveInfo(
                         data.storyUnit,
                         positionFrom = data.positionFrom,
-                        positionTo = drawInfo.position
+                        positionTo = drawInfo.positionList
                     )
                 )
             }

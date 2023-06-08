@@ -39,7 +39,7 @@ import com.github.leandroborgesferreira.storyteller.text.edition.TextCommandHand
 class MessageStepDrawer(
     private val containerModifier: Modifier = Modifier,
     private val innerContainerModifier: Modifier = Modifier,
-    private val onTextEdit: (String, Int) -> Unit,
+    private val onTextEdit: (String, List<Int>) -> Unit,
     private val onDeleteRequest: (DeleteInfo) -> Unit,
     private val commandHandler: TextCommandHandler,
 ) : StoryUnitDrawer {
@@ -68,18 +68,18 @@ class MessageStepDrawer(
                         .focusRequester(focusRequester)
                         .fillMaxWidth()
                         .callOnEmptyErase(inputText.selection) {
-                            onDeleteRequest(DeleteInfo(step, drawInfo.position))
+                            onDeleteRequest(DeleteInfo(step, drawInfo.positionList))
                         },
                     value = inputText,
                     onValueChange = { value ->
                         if (!commandHandler.handleCommand(
                                 value.text,
                                 step,
-                                drawInfo.position
+                                drawInfo.positionList
                             )
                         ) {
                             inputText = value
-                            onTextEdit(value.text, drawInfo.position)
+                            onTextEdit(value.text, drawInfo.positionList)
                         }
                     },
                     keyboardOptions = KeyboardOptions(

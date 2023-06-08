@@ -52,7 +52,7 @@ class ImageStepDrawer(
                         receiver = step,
                         sender = data.storyUnit,
                         positionFrom = data.positionFrom,
-                        positionTo = drawInfo.position
+                        positionTo = drawInfo.positionList
                     )
                 )
             }
@@ -72,7 +72,7 @@ class ImageStepDrawer(
             ) {
                 DragTarget(
                     modifier = imageModifier,
-                    dataToDrop = DropInfo(step, drawInfo.position)
+                    dataToDrop = DropInfo(step, drawInfo.positionList)
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)

@@ -40,18 +40,18 @@ class CommandsDecoratorDrawer(
                 innerStep.run { Step(step = step, drawInfo = drawInfo) }
             }
 
-            DeleteButton(step, drawInfo.position)
+            DeleteButton(step, drawInfo.positionList)
         }
     }
 
     @Composable
-    private fun BoxScope.DeleteButton(step: StoryStep, position: Int) {
+    private fun BoxScope.DeleteButton(step: StoryStep, positionList: List<Int>) {
         Box(
             modifier = Modifier
                 .buttonModifier()
                 .align(Alignment.TopStart)
         ) {
-            IconButton(onClick = { onDelete(DeleteInfo(step, position)) }) {
+            IconButton(onClick = { onDelete(DeleteInfo(step, positionList)) }) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = "",

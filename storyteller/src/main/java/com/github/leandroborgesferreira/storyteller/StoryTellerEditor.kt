@@ -38,7 +38,7 @@ fun StoryTellerEditor(
                                 drawInfo = DrawInfo(
                                     editable = editable,
                                     focusId = storyState.focusId,
-                                    position = index,
+                                    positionList = listOf(index),
                                     extraData = mapOf("listSize" to storyState.stories.size)
                                 )
                             )

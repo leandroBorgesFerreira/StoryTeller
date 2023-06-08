@@ -2,7 +2,7 @@ package com.github.leandroborgesferreira.storyteller.drawer.content
 
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,9 +33,17 @@ class ImageGroupDrawer(
         }
 
         LazyRow(modifier = modifier.focusRequester(focusRequester)) {
-            items(steps) { storyStep ->
+            itemsIndexed(steps) { index, storyStep ->
                 imageStepDrawer.run {
-                    Step(storyStep, drawInfo = drawInfo.copy(focusId = null))
+                    val positionList = drawInfo.positionList
+
+                    Step(
+                        storyStep,
+                        drawInfo = drawInfo.copy(
+                            focusId = null,
+                            positionList = positionList + index
+                        )
+                    )
                 }
             }
         }
