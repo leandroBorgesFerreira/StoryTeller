@@ -15,6 +15,7 @@ import com.github.leandroborgesferreira.storyteller.model.change.MoveInfo
 import com.github.leandroborgesferreira.storyteller.model.change.TextEditInfo
 import com.github.leandroborgesferreira.storyteller.model.story.DrawState
 import com.github.leandroborgesferreira.storyteller.model.story.DrawStory
+import com.github.leandroborgesferreira.storyteller.model.story.Focus
 import com.github.leandroborgesferreira.storyteller.model.story.StoryState
 import com.github.leandroborgesferreira.storyteller.model.story.StoryStep
 import com.github.leandroborgesferreira.storyteller.model.story.StoryType
@@ -76,7 +77,7 @@ class StoryTellerManager(
     val toDraw = _positionsOnEdit.flatMapLatest { positions ->
         Log.d("Manager", "new edit positions: ${positions.joinToString()}")
         currentStory.map { storyState ->
-            val focus = storyState.focusId
+            val focus = storyState.focus
 
             val toDrawStories = storyState.stories.mapValues { (position, storyStep) ->
                 DrawStory(storyStep, positions.contains(position))
@@ -115,7 +116,7 @@ class StoryTellerManager(
 
         _currentStory.value = StoryState(
             normalized + normalized,
-            firstMessage.id
+            Focus(firstMessage.id)
         )
     }
 
@@ -128,7 +129,7 @@ class StoryTellerManager(
             val mutable = storyMap.toMutableMap()
             mutable[nextPosition] = storyStep.copy(localId = UUID.randomUUID().toString())
             _currentStory.value =
-                _currentStory.value.copy(stories = mutable, focusId = storyStep.id)
+                _currentStory.value.copy(stories = mutable, focus = Focus(storyStep.id))
         }
     }
 
@@ -224,7 +225,7 @@ class StoryTellerManager(
         val lastContentStory = stories[stories.size - 3]
 
         if (lastContentStory?.type == StoryType.MESSAGE.type) {
-            val newState = _currentStory.value.copy(focusId = lastContentStory.id)
+            val newState = _currentStory.value.copy(focus = Focus(lastContentStory.id))
             _currentStory.value = newState
         } else {
             var acc = stories.size - 1
@@ -237,7 +238,7 @@ class StoryTellerManager(
                 acc to StoryStep(type = StoryType.LARGE_SPACE.type),
             )
 
-            _currentStory.value = StoryState(newStories, newLastMessage.id)
+            _currentStory.value = StoryState(newStories, Focus(newLastMessage.id))
         }
     }
 
@@ -288,7 +289,7 @@ class StoryTellerManager(
                 )
                 _currentStory.value = StoryState(
                     newStory,
-                    newStory[action.position]?.id
+                    newStory[action.position]?.id?.let(::Focus)
                 )
 
                 _scrollToPosition.value = action.position
@@ -327,10 +328,10 @@ class StoryTellerManager(
             _currentStory.value.copy(stories = newStories)
     }
 
-    private fun updateStory(position: Int, newStep: StoryStep, focusId: String? = null) {
+    private fun updateStory(position: Int, newStep: StoryStep, focus: Focus? = null) {
         val newMap = _currentStory.value.stories.toMutableMap()
         newMap[position] = newStep
-        _currentStory.value = StoryState(newMap, focusId)
+        _currentStory.value = StoryState(newMap, focus)
     }
 
     private fun revertAddText(currentStory: Map<Int, StoryStep>, addText: AddText) {
@@ -348,7 +349,8 @@ class StoryTellerManager(
             mutableSteps[addText.position] =
                 revertStep.copy(localId = UUID.randomUUID().toString(), text = newText)
 
-            _currentStory.value = StoryState(mutableSteps, focusId = revertStep.id)
+            _currentStory.value =
+                StoryState(mutableSteps, focus = Focus(revertStep.id, atEnd = true))
         }
     }
 
@@ -358,7 +360,7 @@ class StoryTellerManager(
         mutableSteps[position]?.let { editStep ->
             val newText = "${editStep.text.toString()}${addText.text}"
             mutableSteps[position] = editStep.copy(text = newText)
-            _currentStory.value = StoryState(mutableSteps, focusId = editStep.id)
+            _currentStory.value = StoryState(mutableSteps, focus = Focus(editStep.id, atEnd = true))
         }
     }
 
@@ -380,7 +382,7 @@ class StoryTellerManager(
 
         return StoryState(
             stories = newStory,
-            focusId = deleteInfo.storyUnit.id
+            focus = Focus(deleteInfo.storyUnit.id, atEnd = true)
         )
     }
 

@@ -79,8 +79,8 @@ class MessageDrawer(
                         mutableStateOf(TextFieldValue(text, TextRange(text.length)))
                     }
 
-                    LaunchedEffect(drawInfo.focusId) {
-                        if (drawInfo.focusId == step.id) {
+                    LaunchedEffect(drawInfo.focus?.id) {
+                        if (drawInfo.focus?.id == step.id) {
                             focusRequester.requestFocus()
                         }
                     }
@@ -98,7 +98,10 @@ class MessageDrawer(
                             
                             inputText = if (text.contains("\n")) {
                                 val newText = text.split("\n", limit = 2)[0]
-                                TextFieldValue(newText, TextRange(newText.length))
+                                TextFieldValue(
+                                    newText,
+                                    TextRange(newText.length)
+                                )
                             } else {
                                 value
                             }

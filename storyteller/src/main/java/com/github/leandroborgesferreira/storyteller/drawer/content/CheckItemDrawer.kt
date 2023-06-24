@@ -102,8 +102,8 @@ class CheckItemDrawer(
                                 TextStyle(color = MaterialTheme.colorScheme.onBackground)
                             }
 
-                            LaunchedEffect(drawInfo.focusId) {
-                                if (drawInfo.focusId == step.id) {
+                            LaunchedEffect(drawInfo.focus?.id) {
+                                if (drawInfo.focus?.id == step.id) {
                                     focusRequester.requestFocus()
                                 }
                             }

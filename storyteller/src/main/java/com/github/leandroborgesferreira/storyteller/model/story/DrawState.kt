@@ -6,5 +6,5 @@ package com.github.leandroborgesferreira.storyteller.model.story
  */
 data class DrawState(
     val stories: Map<Int, DrawStory>,
-    val focusId: String? = null
+    val focus: Focus? = null
 )

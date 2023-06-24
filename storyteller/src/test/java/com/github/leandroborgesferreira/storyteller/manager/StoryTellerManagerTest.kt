@@ -746,6 +746,6 @@ class StoryTellerManagerTest {
         val lastContentStory = currentStory[currentStory.size - 3]
 
         assertEquals(lastContentStory!!.type, StoryType.MESSAGE.type)
-        assertEquals(storyManager.currentStory.value.focusId, lastContentStory.id)
+        assertEquals(storyManager.currentStory.value.focus, lastContentStory.id)
     }
 }

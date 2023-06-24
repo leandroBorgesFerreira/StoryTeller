@@ -25,15 +25,15 @@ class ImageGroupDrawer(
         val steps = step.steps
         val focusRequester = remember { FocusRequester() }
 
-        LaunchedEffect(drawInfo.focusId) {
-            if (drawInfo.focusId == step.localId) {
+        LaunchedEffect(drawInfo.focus?.id) {
+            if (drawInfo.focus?.id == step.localId) {
                 focusRequester.requestFocus()
             }
         }
 
         LazyRow(modifier = modifier.focusRequester(focusRequester)) {
             items(steps) { storyStep ->
-                imageStepDrawer.Step(storyStep, drawInfo = drawInfo.copy(focusId = null))
+                imageStepDrawer.Step(storyStep, drawInfo = drawInfo.copy(focus = null))
             }
         }
     }

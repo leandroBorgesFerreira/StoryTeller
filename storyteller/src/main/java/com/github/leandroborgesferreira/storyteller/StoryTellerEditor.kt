@@ -38,7 +38,7 @@ fun StoryTellerEditor(
                                 step = drawStory.storyStep,
                                 drawInfo = DrawInfo(
                                     editable = editable,
-                                    focusId = storyState.focusId,
+                                    focus = storyState.focus,
                                     position = index,
                                     extraData = mapOf("listSize" to storyState.stories.size),
                                     selectMode = drawStory.isSelected

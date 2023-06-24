@@ -61,8 +61,8 @@ class TitleDrawer(
                     mutableStateOf(TextFieldValue(text, TextRange(text.length)))
                 }
 
-                LaunchedEffect(drawInfo.focusId) {
-                    if (drawInfo.focusId == step.id) {
+                LaunchedEffect(drawInfo.focus?.id) {
+                    if (drawInfo.focus?.id == step.id) {
                         focusRequester.requestFocus()
                     }
                 }
